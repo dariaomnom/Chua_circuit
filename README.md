@@ -5,4 +5,7 @@
 cmake .  
 make  
 ./Chua_circuit  
-2) Через run в Clion
+2) Или сразу  
+make  
+./Chua_circuit
+3) Через run в Clion
