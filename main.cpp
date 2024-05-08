@@ -20,7 +20,7 @@ const double a = C2 / C1;
 const double b = C2 / (G * G * L);
 
 const double T = 100.0;
-const double h = 0.001;
+const double h = 0.01;
 
 class RenderWindow;
 
@@ -58,7 +58,7 @@ void RK4(double* X, double* X_tmp, double* k1, double* k2, double* k3, double* k
 
 int main() {
 
-    int num_points = 600;
+    int num_points = 700;
 
     std::ifstream file("../start.txt"); // Откройте файл для чтения
     if (!file) {
@@ -75,8 +75,16 @@ int main() {
     while (std::getline(file, line) && i < num_points) {
         std::istringstream iss(line);
         iss >> start_points[i][0] >> start_points[i][1] >> start_points[i][2];
-        iss >> original_points[i][0] >> original_points[i][1] >> original_points[i][2];
-//        std::cout << start_points[i][0] << " " << start_points[i][1] << std::endl;
+        for (int i = 0; i < num_points; i++) {
+            for (int j = 0; j < 3; j++) {
+                original_points[i][j] = start_points[i][j];
+            }
+        }
+
+//        if (i <= 10) {
+//            std::cout << start_points[i][0] << " " << start_points[i][1] << std::endl;
+//            std::cout << original_points[i][0] << " " << original_points[i][1] << std::endl;
+//        }
         i++;
     }
     file.close();
@@ -101,11 +109,11 @@ int main() {
 
 
 //          Для создания графика в gnuplot
-//    std::ofstream outputFile("../data3d.txt");
-//    for (double t = 0; t < T; t += h) {
-//        outputFile << std::fixed << std::setprecision(16) << X[0] << " " << X[1]  << " " << X[2] << std::endl;
-//        RK4(X, X_tmp, k1, k2, k3, k4);
-//    }
+    std::ofstream outputFile("../data3d.txt");
+    for (double t = 0; t < T; t += h) {
+        outputFile << std::fixed << std::setprecision(16) << X[0] << " " << X[1]  << " " << X[2] << std::endl;
+        RK4(X, X_tmp, k1, k2, k3, k4);
+    }
 //    return 0;
 
 
@@ -113,7 +121,8 @@ int main() {
         const unsigned int windowWidth = 800;
         const unsigned int windowHeight = 800;
         sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Attractor");
-        sf::View view(sf::FloatRect(-6.f, -6.f, 12.f, 12.f));
+        sf::View view(sf::FloatRect(-5.f, -5.f, 10.f, 10.f));
+//        sf::View view(sf::FloatRect(-25.f, -25.f, 50.f, 50.f));
         view.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
         window.setView(view);
 
@@ -123,8 +132,7 @@ int main() {
         }
 
         sf::Clock clock;
-        const float desiredFrameTime = 100.0f; // 100 мс = 10 кадров в секунду
-
+        const float desiredFrameTime = 5.0f; // 100 мс = 10 кадров в секунду
 
 
         double t = 0;
@@ -151,18 +159,20 @@ int main() {
                     coordinates[i].x = start_points[i][0];
                     coordinates[i].y = start_points[i][1];
 
-                    sf::CircleShape point_new(0.020f);
+                    sf::CircleShape point_new(0.025f);
+//                    sf::CircleShape point_new(0.20f);
 
                     point_new.setPosition(coordinates[i]);
                     if (original_points[i][0] < 0 && original_points[i][1] <= 0) {
                         point_new.setFillColor(sf::Color::Red);
-                    } else if (original_points[i][0] <= 0 && original_points[i][1] > 0) {
+                    } else if (original_points[i][0] < 0 && original_points[i][1] > 0) {
                         point_new.setFillColor(sf::Color::Green);
-                    } else if (original_points[i][0] <= 0 && original_points[i][1] <= 0) {
+                    } else if (original_points[i][0] >= 0 && original_points[i][1] <= 0) {
                         point_new.setFillColor(sf::Color::Yellow);
-                    } else if (original_points[i][0] > 0 && original_points[i][1] > 0) {
+                    } else if (original_points[i][0] >= 0 && original_points[i][1] > 0) {
                         point_new.setFillColor(sf::Color::Blue);
-                    } else {
+                    }
+                    else {
                         point_new.setFillColor(sf::Color::Magenta);
                     }
 
@@ -173,7 +183,12 @@ int main() {
                 }
                 t += h;
             } else {
-                break;
+//                break;
+                for (int j = 0; j < num_points; j++) {
+                    start_points[j][0] = original_points[j][0];
+                    start_points[j][1] = original_points[j][1];
+                    t = 0;
+                }
             }
 
 
