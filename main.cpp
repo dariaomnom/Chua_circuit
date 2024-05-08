@@ -19,8 +19,8 @@ const double m1 = Gb / G;
 const double a = C2 / C1;
 const double b = C2 / (G * G * L);
 
-const double T = 100.0;
-const double h = 0.01;
+const double T = 10.0;
+const double h = 0.001;
 
 class RenderWindow;
 
