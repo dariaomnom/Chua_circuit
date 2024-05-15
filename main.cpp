@@ -114,7 +114,7 @@ struct Vector3 {
 
 
 int main() {
-    int num_points = 200;
+    int num_points = 10000;
 
 //    double start_points[num_points][3];
 //    int original_points[num_points];
@@ -128,7 +128,7 @@ int main() {
 
     int* original_points = new int[num_points];
 
-    make_start_points(start_points, original_points, num_points, -1.0, 1.0);
+    make_start_points(start_points, original_points, num_points, -10.0, 10.0);
 //    make_start_points(start_points, original_points, 800, -1.0, 1.0);
 
 //    for (int i = 0; i < num_points; i++) {
@@ -257,7 +257,7 @@ int main() {
                         window.close();
                     else if (event.key.code == sf::Keyboard::X) {
 //                        m0 = -1.8 / G;
-                        angleX += 0.1f;
+                        angleX += 0.1;
 //                        Rotation[0][0] = std::cos(angleY)*std::cos(angleZ);
 //                        Rotation[0][1] = -std::sin(angleZ)*std::cos(angleY);
 //                        Rotation[0][2] = std::sin(angleY);
@@ -281,7 +281,7 @@ int main() {
                         flag = true;
                     }
                     else if (event.key.code == sf::Keyboard::Y) {
-                        angleY += 0.1f;
+                        angleZ += 0.1;
                         std::cout << "Y-rotation" << std::endl;
                         std::cout << angleX << " " << angleY << " " << angleZ << std::endl;
 //                        Rotation[0][0] = std::cos(angleY);
@@ -296,7 +296,7 @@ int main() {
                         flag = true;
                     }
                     else if (event.key.code == sf::Keyboard::Z) {
-                        angleZ += 0.1f;
+                        angleY += 0.1;
                         std::cout << "Z-rotation" << std::endl;
                         std::cout << angleX << " " << angleY << " " << angleZ << std::endl;
 //                        Rotation[0][0] = std::cos(angleZ);
@@ -324,22 +324,21 @@ int main() {
 
                 }
 
-                    if (flag) {
-                        Rotation[0][0] = std::cos(angleY) * std::cos(angleZ);
-                        Rotation[0][1] = -std::sin(angleZ) * std::cos(angleY);
-                        Rotation[0][2] = std::sin(angleY);
-                        Rotation[1][0] = std::sin(angleX) * std::sin(angleY) * std::cos(angleZ) +
-                                         std::sin(angleZ) * std::cos(angleX);
-                        Rotation[1][1] = -std::sin(angleX) * std::sin(angleY) * std::sin(angleZ) +
-                                         std::cos(angleX) * std::cos(angleZ);
-                        Rotation[1][2] = -std::sin(angleX) * std::cos(angleY);
-                        Rotation[2][0] = std::sin(angleX) * std::sin(angleZ) -
-                                         std::sin(angleY) * std::cos(angleX) * std::cos(angleZ);
-                        Rotation[2][1] = std::sin(angleX) * std::cos(angleZ) +
-                                         std::sin(angleY) * std::sin(angleZ) * std::cos(angleX);
-                        Rotation[2][2] = std::cos(angleX) * std::cos(angleY);
-                    }
-
+            }
+            if (flag) {
+                Rotation[0][0] = std::cos(angleY) * std::cos(angleZ);
+                Rotation[0][1] = -(std::sin(angleZ) * std::cos(angleY));
+                Rotation[0][2] = std::sin(angleY);
+                Rotation[1][0] = std::sin(angleX) * std::sin(angleY) * std::cos(angleZ) +
+                                 std::sin(angleZ) * std::cos(angleX);
+                Rotation[1][1] = -(std::sin(angleX) * std::sin(angleY) * std::sin(angleZ)) +
+                                 std::cos(angleX) * std::cos(angleZ);
+                Rotation[1][2] = -(std::sin(angleX) * std::cos(angleY));
+                Rotation[2][0] = std::sin(angleX) * std::sin(angleZ) -
+                                 (std::sin(angleY) * std::cos(angleX) * std::cos(angleZ));
+                Rotation[2][1] = std::sin(angleX) * std::cos(angleZ) +
+                                 std::sin(angleY) * std::sin(angleZ) * std::cos(angleX);
+                Rotation[2][2] = std::cos(angleX) * std::cos(angleY);
             }
 
             sf::Time elapsed = clock.restart();
@@ -441,7 +440,7 @@ int main() {
                         point_new.setFillColor(sf::Color::Blue);
                     }
                     else {
-                        point_new.setFillColor(sf::Color::Magenta);
+                        point_new.setFillColor(sf::Color::Red);
                     }
 //                    if (original_points[i][0] < 0 && original_points[i][1] <= 0) {
 //                        point_new.setFillColor(sf::Color::Red);
